@@ -1,0 +1,16 @@
+{
+  "name": "snapchat-backend",
+  "version": "1.0.0",
+  "description": "snapchat Backend Server Koa & MongoDB",
+  "main": "index.js",
+  "repository": "https://github.com/riverfrot/snapchat/tree/master/snapchat-backend",
+  "author": "DongHoon Jung",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-plugin-react": "^7.12.4"
+  }
+}
