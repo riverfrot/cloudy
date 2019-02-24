@@ -7,10 +7,16 @@
   "author": "DongHoon Jung",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.7.0"
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0"
   },
   "devDependencies": {
     "eslint": "^5.14.1",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint-plugin-react": "^7.12.4",
+    "nodemon": "^1.18.10"
+  },
+  "scripts": {
+    "start ": "node src",
+    "start:dev": "nodemon --watch src/ src/index.js"
   }
 }
