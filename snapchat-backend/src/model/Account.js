@@ -38,17 +38,12 @@ Account.statics.findById = function(id) {
   return this.findOne({ id }).exec();
 };
 
-// Account.statics.findByEmailOrUsername = function({ username, email }) {
-//   return this.findOne({
-//     // $or 연산자를 통해 둘중에 하나를 만족하는 데이터를 찾습니다.
-//     $or: [
-//       {
-//         "profile.username": username
-//       },
-//       { email }
-//     ]
-//   }).exec();
-// };
+Account.statics.findByEmailOrUsername = function({ id, nickName }) {
+  return this.findOne({
+    // $or 연산자를 통해 둘중에 하나를 만족하는 데이터를 찾습니다.
+    $or: [{ id }, { nickName }]
+  }).exec();
+};
 
 Account.statics.localRegister = function({ id, nickName, password }) {
   const account = new this({

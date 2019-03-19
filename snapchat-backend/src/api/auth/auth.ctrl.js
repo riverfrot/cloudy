@@ -25,29 +25,38 @@ exports.localRegister = async ctx => {
   });
 
   // 스키마 검증 실패
-  //   if (result.error) {
-  //     ctx.status = 400;
-  //     return;
-  //   }
+  // if (result.error) {
+  //   ctx.status = 400;
+  //   return;
+  // }
 
   // 아이디 / 이메일 중복 체크
-  //   let existing = null;
-  //   try {
-  //     existing = await Account.findByEmailOrUsername(ctx.request.body);
-  //   } catch (e) {
-  //     ctx.throw(500, e);
-  //   }
-  //   if (existing) {
-  //     // 중복되는 아이디/이메일이 있을 경우
-  //     ctx.status = 409; // Conflict
-  //     // 어떤 값이 중복되었는지 알려줍니다
-  //     ctx.body = {
-  //       key: existing.id === ctx.request.body.id
-  //     };
-  //     return;
-  //   }
+  let existing = null;
+  let overlapPoint = null;
+  try {
+    existing = await Account.findByEmailOrUsername(ctx.request.body);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+  if (existing) {
+    // 중복되는 아이디/이메일이 있을 경우
+    ctx.status = 409; // Conflict
+
+    // 어떤 값이 중복되었는지 확인 합니다.
+    ctx.request.body.nickName === existing.nickName
+      ? (overlapPoint = "nickname")
+      : (overlapPoint = "id");
+
+    ctx.body = {
+      // key: existing.id === ctx.request.body.id
+      overlapPoint: overlapPoint
+    };
+
+    return;
+  }
 
   //   계정 생성
+
   let account = null;
   try {
     account = await Account.localRegister(ctx.request.body);
@@ -102,6 +111,11 @@ exports.localLogin = async ctx => {
   if (!account || !account.validatePassword(password)) {
     // 유저가 존재하지 않거나 || 비밀번호가 일치하지 않으면
     ctx.status = 403; // Forbidden
+
+    ctx.body = {
+      // key: existing.id === ctx.request.body.id
+      overlapPoint: "login"
+    };
     return;
   }
 
@@ -116,7 +130,7 @@ exports.localLogin = async ctx => {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7
   });
-  ctx.body = account.id;
+  ctx.body = account.nickName;
 };
 
 // 이메일 / 아이디 존재유무 확인
