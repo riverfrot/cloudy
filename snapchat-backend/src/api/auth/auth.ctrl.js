@@ -24,12 +24,6 @@ exports.localRegister = async ctx => {
     }
   });
 
-  // 스키마 검증 실패
-  // if (result.error) {
-  //   ctx.status = 400;
-  //   return;
-  // }
-
   // 아이디 / 이메일 중복 체크
   let existing = null;
   let overlapPoint = null;
@@ -133,6 +127,74 @@ exports.localLogin = async ctx => {
   ctx.body = account.nickName;
 };
 
+// Third Party 로그인 / 회원가입
+exports.thirdLogin = async ctx => {
+  // 데이터 검증
+  const schema = Joi.object().keys({
+    id: Joi.string()
+      .alphanum()
+      .required(),
+    accesstoken: Joi.string().required(),
+    nickName: Joi.string().required(),
+    logintype: Joi.string().required()
+  });
+
+  const result = Joi.validate(ctx.request.body, schema, function(err, value) {
+    if (err) {
+      console.log(err.message);
+      return catched(err.message);
+    }
+  });
+  const { id } = ctx.request.body;
+
+  // 아이디 / 이메일 중복 체크
+
+  let account = null;
+  let token = null;
+
+  try {
+    // 이메일로 계정 찾기
+    account = await Account.findById(id);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  if (account) {
+    try {
+      token = await account.generateToken();
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+
+    ctx.cookies.set("access_token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    });
+    ctx.body = account.nickName;
+  } else {
+    //   계정 생성
+    //   동일 계정이 없을 경우에
+    try {
+      account = await Account.thirdRegister(ctx.request.body);
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+
+    try {
+      token = await account.generateToken();
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+
+    ctx.cookies.set("access_token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    });
+
+    ctx.body = account.nickName;
+  }
+};
+
 // 이메일 / 아이디 존재유무 확인
 exports.exists = async ctx => {
   const { key, value } = ctx.params;
@@ -170,5 +232,6 @@ exports.check = ctx => {
     return;
   }
 
+  console.log(user);
   ctx.body = user.id;
 };

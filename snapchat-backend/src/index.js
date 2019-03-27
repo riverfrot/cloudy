@@ -3,7 +3,7 @@ require("dotenv").config(); // .env 파일에서 환경변수 불러오기
 // const hashmap = require("./lib/hashmap");
 const port = process.env.PORT || 4000; // PORT 값이 설정되어있지 않다면 4001번을 사용합니다.
 
-const HashMap = require("HashMap");
+const HashMap = require("hashmap");
 const Koa = require("koa");
 const Router = require("koa-router");
 const mongoose = require("mongoose");

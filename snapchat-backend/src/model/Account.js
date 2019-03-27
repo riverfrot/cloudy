@@ -55,6 +55,49 @@ Account.statics.localRegister = function({ id, nickName, password }) {
   return account.save();
 };
 
+Account.statics.localRegister = function({ id, nickName, password }) {
+  const account = new this({
+    id,
+    nickName,
+    password: hash(password)
+  });
+
+  return account.save();
+};
+
+Account.statics.thirdRegister = function({
+  id,
+  nickName,
+  accesstoken,
+  logintype
+}) {
+  let account;
+  if (logintype === "google") {
+    account = new this({
+      id,
+      nickName,
+      social: {
+        google: {
+          id,
+          accessToken: accesstoken
+        }
+      }
+    });
+  } else {
+    account = new this({
+      id,
+      nickName,
+      social: {
+        facebook: {
+          id,
+          accessToken: accesstoken
+        }
+      }
+    });
+  }
+  return account.save();
+};
+
 // 함수로 전달받은 password의 해시값과 데이터에 담겨있는 해시값을 비교합니다.
 Account.methods.validatePassword = function(password) {
   const hashed = hash(password);
@@ -65,7 +108,8 @@ Account.methods.generateToken = function() {
   // JWT 에 담을 내용
   const payload = {
     _id: this._id,
-    id: this.id
+    id: this.id,
+    nickname: this.nickName
   };
 
   return generateToken(payload, "account");

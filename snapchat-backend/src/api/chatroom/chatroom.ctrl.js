@@ -1,4 +1,4 @@
-const ChatRoom = require("../../model/chatroom");
+const ChatRoom = require("../../model/ChatRoom");
 const Joi = require("joi");
 
 exports.register = async ctx => {
@@ -17,11 +17,13 @@ exports.register = async ctx => {
   }
 
   const { roomID, title } = ctx.request.body;
+  const randomImageNumber = Math.floor(Math.random() * 32) + 1;
 
   //  새 채팅방을 인스턴스를 만듭니다.
   const chatroom = new ChatRoom({
     roomID,
-    title
+    title,
+    randomImageNumber
   });
 
   try {
@@ -74,6 +76,37 @@ exports.list = async ctx => {
     ctx.set("Last-Page", Math.ceil(chatroomCount / 16));
     ctx.set("next", next);
   } catch (e) {
+    ctx.throw(e, 500);
+  }
+};
+
+exports.dummyregister = async ctx => {
+  // const { title, body, tags, publisher } = ctx.request.body;
+
+  const title_arr = new Array(
+    "랜덤 방 생성",
+    "익명 채팅 방",
+    "Abby Green Room",
+    "Character Savannah Room",
+    "별 헤는 밤",
+    "별 헤는 밤",
+    "청춘예찬"
+  );
+
+  const title = title_arr[Math.floor(Math.random() * 7) + 1];
+  const randomImageNumber = Math.floor(Math.random() * 32) + 1;
+
+  //  새 채팅방을 인스턴스를 만듭니다.
+  const chatroom = new ChatRoom({
+    title,
+    randomImageNumber
+  });
+
+  try {
+    await chatroom.save(); // 데이터베이스에 등록합니다.
+    ctx.body = chatroom; //저장된 결과를 반환합니다.
+  } catch (e) {
+    // 데이터베이스의 오류가 발생할 경우 에러 처리하는 구문.,
     ctx.throw(e, 500);
   }
 };

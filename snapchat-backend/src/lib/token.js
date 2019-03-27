@@ -41,8 +41,8 @@ exports.jwtMiddleware = async (ctx, next) => {
     // 토큰 만료일이 하루밖에 안남으면 토큰을 재발급합니다
     if (Date.now() / 1000 - decoded.iat > 60 * 60 * 24) {
       // 하루가 지나면 갱신해준다.
-      const { _id, id } = decoded;
-      const freshToken = await generateToken({ _id, id }, "account");
+      const { _id, id, nickName } = decoded;
+      const freshToken = await generateToken({ _id, id, nickName }, "account");
       ctx.cookies.set("access_token", freshToken, {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7days
         httpOnly: true
