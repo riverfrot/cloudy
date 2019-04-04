@@ -1,0 +1,45 @@
+.header {
+  .header-content {
+    height: 5rem;
+    width: 1400px;
+    margin: 0 auto; // 가운데 정렬
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    // 내부 아이템 세로 가운데 정렬
+    display: flex;
+    align-items: center;
+
+    // 반응형 레이아웃
+    // @include media("<wide") {
+    //   width: 100%;
+    // }
+
+    // @include media("<medium") {
+    //   padding-left: 1rem;
+    //   padding-right: 1rem;
+    // }
+
+    .brand {
+      //로고
+      font-size: 1.75rem;
+      margin: 0;
+      // position: absolute;
+      // top: 50%;
+      // -ms-transform: translateY(-50%);
+      // transform: translateY(-50%);
+      font-weight: 600;
+      padding-top: 1.5rem;
+    }
+    .right {
+      //오른쪽 내용
+      margin-left: auto;
+      margin-top: 1rem;
+
+      .btn-delete {
+        //오른쪽 내용
+        margin-right: 1rem;
+      }
+    }
+  }
+}
