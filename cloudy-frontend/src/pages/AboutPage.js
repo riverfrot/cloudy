@@ -6,7 +6,6 @@ const AboutPage = () => {
   return (
     <div>
       <HeaderContainer />
-
       <Container text>
         <Message info>
           <Message.Header>Cloudy</Message.Header>
@@ -31,8 +30,8 @@ const AboutPage = () => {
           <p>gitHub 주소</p>
           <p>
             <Icon name="github" />
-            <a href="https://github.com/riverfrot/snapchat-frontend">
-              https://github.com/riverfrot/snapchat-frontend
+            <a href="https://github.com/riverfrot/">
+              https://github.com/riverfrot/
             </a>
           </p>
         </Message>

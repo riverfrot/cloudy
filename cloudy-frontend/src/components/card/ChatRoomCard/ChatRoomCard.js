@@ -24,10 +24,10 @@ const ChatRoomCard = ({ title, publishedDate, id, randomImageNumber }) => (
       </Link> */}
     </Card.Content>
     <Card.Content extra>
-      <a>
+      {/* <a>
         <Icon name="users" />
         22명 참여 중
-      </a>
+      </a> */}
     </Card.Content>
   </Card>
 );

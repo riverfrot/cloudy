@@ -24,10 +24,10 @@ const PostCard = ({ id, title, body, publishedDate, randomImageNumber }) => (
       </Link>
     </Card.Content>
     <Card.Content extra>
-      <a>
+      {/* <a>
         <Icon name="comments" />
         22개의 댓글
-      </a>
+      </a> */}
     </Card.Content>
   </Card>
 );
